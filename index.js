@@ -116,6 +116,21 @@ app.get("/status/close", (req,res)=>{
 })
 
 
+// SETOR
+app.get("/setor/:nomeSetor", (req,res)=>{
+    const {nomeSetor} = req.params;
+    const processBySetor = processos.filter(processo=>processo.setor === nomeSetor);
+
+    return res.status(200).json(processBySetor);
+})
+
+// RANDOM
+app.get("/random", (req,res)=>{    
+    const nrProcessos = processos.length;
+    return res.status(200).json(processos[Math.floor(Math.random() * nrProcessos)]);
+})
+
+
 
 
 //--------------------------------------------------------------------------------
