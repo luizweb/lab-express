@@ -66,11 +66,9 @@ app.post("/create", (req,res)=>{
 app.put("/edit/:id", (req,res)=>{
     const {id} = req.params;
     const updateById = processos.find(processo=>processo.id === id);
-
     const index = processos.indexOf(updateById);
+    const clone = {...updateById, ...req.body}; 
 
-    const clone = {...updateById, ...req.body};
-   
     processos[index] = clone;
     
     return res.status(200).json(processos);
@@ -86,6 +84,37 @@ app.delete("/delete/:id", (req,res)=>{
     
     return res.status(200).json(processos);
 })
+
+//PROCESS BY ID
+app.get("/process/:id", (req,res)=>{
+    const {id} = req.params;
+    const processById = processos.find(processo=>processo.id === id);
+
+    return res.status(200).json(processById);
+})
+
+
+// ADD COMMENT
+app.put("/addComment/:id", (req,res)=>{
+    const {id} = req.params;
+    const addComment = processos.find(processo=>processo.id === id);
+    addComment.comments.push(req.body.comments);
+
+    return res.status(200).json(processos);
+});
+
+// STATUS EM ANDAMENTO
+app.get("/status/open", (req,res)=>{    
+    const processByStatus = processos.filter(processo=>processo.status === "Em andamento");
+    return res.status(200).json(processByStatus);
+});
+
+// STATUS FINALIZADOS
+app.get("/status/close", (req,res)=>{    
+    const processByStatus = processos.filter(processo=>processo.status === "Finalizado");
+    return res.status(200).json(processByStatus);
+})
+
 
 
 
