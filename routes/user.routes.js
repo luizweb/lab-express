@@ -18,22 +18,18 @@ const bancoDados = [
         ]
     }
 ]
-
+    
 // -----------------------------------------------------
 // CRIAÇÃO DAS ROTAS - req (REQUISIÇÃO), res (RESPOSTA)
 // -----------------------------------------------------
 
-// RAIZ
-userRoute.get("/", (req,res)=>{    
-    const bemVindo = "Bem vindo!!!"
-    return res.status(200).json({msg: bemVindo})
-})
+
 
 
 //GET -  CRIAR UMA ROTA QUE RETORNA O BANCO DE DADOS
 userRoute.get("/all-users", async (req,res)=>{    
     try {
-        const users = await userModel.find();
+        const users = await userModel.find({},{__v:0, updatedAt:0}).sort({age:1});
         return res.status(200).json(users);
     } catch (error) {
         console.log(error);
@@ -42,6 +38,23 @@ userRoute.get("/all-users", async (req,res)=>{
     
     //--- antigo, sem banco de dados mongodb
     //return res.status(200).json(bancoDados);
+})
+
+//GET BY ID
+userRoute.get("/one-user/:id", async (req,res)=>{    
+    try {
+        const {id} = req.params
+        const user = await userModel.findById(id)
+
+        if (!user){
+            return res.status(400).json({msg: "Usuário não encontrado"})
+        }
+
+        return res.status(200).json(user)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({msg: 'Erro ao consultar um usuário'})
+    }
 })
 
 // POST - create
@@ -63,17 +76,47 @@ userRoute.post("/new-user", async (req, res)=>{
 })
 
 // DELETE
-userRoute.delete("/delete/:id", (req,res)=>{
+userRoute.delete("/delete/:id", async (req,res)=>{
+    try {
+        const {id} = req.params
+        const deletedUser = await userModel.findByIdAndDelete(id)
+
+        if (!deletedUser){
+            return res.status(400).json({msg: "Usuário não encontrado"})
+        }
+
+        return res.status(200).json(deletedUser)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({msg: 'Erro ao deletar um usuário'})
+    }
+
+
+    //--- antigo, sem banco de dados mongodb
     //console.log(req.params);
-    const {id} = req.params; //desconstruindo
+    //const {id} = req.params; //desconstruindo
     //console.log(id); 
 
-    const deleteById = bancoDados.find(user=>user.id === id)
-    const index = bancoDados.indexOf(deleteById)
+    //const deleteById = bancoDados.find(user=>user.id === id)
+    //const index = bancoDados.indexOf(deleteById)
 
-    bancoDados.splice(index, 1);
+    //bancoDados.splice(index, 1);
 
-    return res.status(200).json(bancoDados)
+    //return res.status(200).json(bancoDados)
+})
+
+
+userRoute.put("/edit/:id", async (req,res)=>{
+    try {
+        const { id } = req.params;
+
+        // new: true --> retorna a versão atualizada
+        // runValidators: true --> realizada as verificações do Schema (user.model.js)
+        const updatedUser = await userModel.findByIdAndUpdate(id, {...req.body}, {new: true, runValidators: true})
+        return res.status(200).json(updatedUser)
+    } catch (error) {
+        
+    }
 })
 
 export default userRoute;

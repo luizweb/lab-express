@@ -1,24 +1,42 @@
 import {Schema,model} from "mongoose";
 
-const processSchema = new Schema ({
+const processSchema = new Schema({
     documentName: {
         type: String,
-        required: true
-        },
+        required: true,
+        minLength: 3,
+        maxLength: 20,
+        trim: true,
+        lowercase: true
+    },
     status: {
         type: String,
-        enum: ["Em andamento", "Finalizado"]
-        },
-    details: {type: String},
-    dateInit: {type: Date},
+        enum: ['Aberto', 'Finalizado', 'Em andamento'],
+        default: 'Aberto'
+    },
+    details: {
+        type: String,
+        required: true,
+        minLength: 10,
+        maxLength: 30,
+        trim: true
+    },
+    dateInit: {
+        type: Date
+    },
     comments: [{type: String}],
-    dateEnd: {type: Date},
-    setor: {type: String}
+    dateEnd: {
+        type: Date
+    },
+    setor: {
+        type: String,
+        enum: ['TRE', 'TRJ', 'ENAP', 'SATEC'],
+        default: 'ENAP'
+    }
 },
 {
-    timestamp: true
-}
-)
+    timestamps: true
+})
 
 const processModel = model("Processo", processSchema);
 

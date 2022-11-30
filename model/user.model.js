@@ -33,7 +33,7 @@ const userSchema = new Schema({
     tasks: [{type: String}],
     },
     {
-        timestamp: true,
+        timestamps: true,
     }
 );
 
