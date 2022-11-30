@@ -8,7 +8,6 @@ const userRoute = express.Router();
 // CRIAÇÃO DAS ROTAS - req (REQUISIÇÃO), res (RESPOSTA)
 // -----------------------------------------------------
 
-
 //GET -  all-users
 userRoute.get("/all-users", async (req,res)=>{    
     try {
@@ -70,7 +69,7 @@ userRoute.put("/edit/:id", async (req,res)=>{
     try {
         const { id } = req.params;
 
-        // new: true --> retorna a versão atualizada
+        // new: true --> retorna a atualização realizada
         // runValidators: true --> realizada as verificações do Schema (user.model.js)
         const updatedUser = await userModel.findByIdAndUpdate(id, {...req.body}, {new: true, runValidators: true});
         return res.status(200).json(updatedUser);
@@ -81,3 +80,4 @@ userRoute.put("/edit/:id", async (req,res)=>{
 })
 
 export default userRoute;
+
