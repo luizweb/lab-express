@@ -5,7 +5,7 @@ const processSchema = new Schema({
         type: String,
         required: true,
         minLength: 3,
-        maxLength: 20,
+        maxLength: 50,
         trim: true,
         lowercase: true
     },
@@ -18,16 +18,17 @@ const processSchema = new Schema({
         type: String,
         required: true,
         minLength: 10,
-        maxLength: 30,
+        maxLength: 50,
         trim: true
     },
     dateInit: {
-        type: Date
-    },
+        type: Date,
+        required: true
+      },
     comments: [{type: String}],
     dateEnd: {
-        type: Date
-    },
+        type: Date,
+      },
     setor: {
         type: String,
         enum: ['TRE', 'TRJ', 'ENAP', 'SATEC'],
