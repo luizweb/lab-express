@@ -4,19 +4,20 @@ import userModel from "../models/user.model.js";
 
 const taskRoute = express.Router();
 
+// POST create task
 taskRoute.post("/create-task/:idUser", async (req,res)=>{
     try {
         const {idUser} = req.params;
         const newTask = await taskModel.create({...req.body, user: idUser});
-        const userUpdated = await userModel.findByIdAndUpdate(idUser, {$push: {tasks: newTask._id}}, {new: true, runValidators: true});        
+        // update user to add a task
+        await userModel.findByIdAndUpdate(idUser, {$push: {tasks: newTask._id}}, {new: true, runValidators: true});        
         return res.status(201).json(newTask);
     } catch (error) {
         console.log(error);
-        return res.status(400).json({msg: "Erro ao criar tarefa"});
     }
 });
 
-
+// GET one-task
 taskRoute.get("/oneTask/:idTask", async (req,res)=>{
     try {
         const {idTask} = req.params;
@@ -27,8 +28,7 @@ taskRoute.get("/oneTask/:idTask", async (req,res)=>{
     }
 })
 
-
-//all-tasks
+// GET all-tasks
 taskRoute.get("/all-tasks", async (req,res)=>{
     try {
         const allTasks = await taskModel.find().populate("user");
@@ -38,31 +38,24 @@ taskRoute.get("/all-tasks", async (req,res)=>{
     }
 })
 
-
-
 //update
 taskRoute.put("/edit/:idTask", async (req,res)=>{
     try {
         const {idTask} = req.params;
         const updatedTask = await taskModel.findOneAndUpdate({_id: idTask}, {...req.body}, {new: true, runValidators:true});
         return res.status(200).json(updatedTask);
-
     } catch (error) {
         console.log(error);
     }    
 })
 
-
-//delete - INTEGRIDADE REFERENCIAL
-// quando apagar uma tarefa, retirar o id do array de tarefas do usuário
+//delete
 taskRoute.delete("/delete/:idTask", async (req,res)=>{
     try {
         const {idTask} = req.params;
-
-        //deletar a tarefa
         const deletedTask = await taskModel.findByIdAndDelete(idTask);
         
-        //retirar o id da tarefa do usuário
+        //delete task id from user
         await userModel.findByIdAndUpdate(deletedTask.user, {$pull: {tasks: idTask}}, {new: true, runValidators:true});
         return res.status(200).json(deletedTask);
     } catch (error) {

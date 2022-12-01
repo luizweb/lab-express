@@ -58,8 +58,8 @@ userRoute.delete("/delete/:id", async (req,res)=>{
             return res.status(400).json({msg: "Usuário não encontrado"});
         }
 
-        //DELETAR TODAS AS TAREFAS (TASKS) DO USUÁRIO - deleteMany
-        await taskModel.deleteMany({user: id}); //filtro
+        // delete all tasks from user - deleteMany
+        await taskModel.deleteMany({user: id}); 
 
         return res.status(200).json(deletedUser);
     } catch (error) {
