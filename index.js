@@ -5,6 +5,7 @@ import connect from "./config/db.config.js";
 
 import userRoute from "./routes/user.routes.js"
 import processRoute from "./routes/process.routes.js";
+import taskRoute from "./routes/task.routes.js";
 
 // dotenv
 dotenv.config();
@@ -27,6 +28,7 @@ app.get("/", (req,res)=>{
 // rotas únicas
 app.use("/user", userRoute);
 app.use("/process", processRoute);
+app.use("/task", taskRoute);
 
 
 //listen -------------------------------------------------------------------------

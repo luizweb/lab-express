@@ -1,4 +1,5 @@
 import express from "express";
+import taskModel from "../model/task.model.js";
 import userModel from "../model/user.model.js";
 
 const userRoute = express.Router();
@@ -23,7 +24,7 @@ userRoute.get("/all-users", async (req,res)=>{
 userRoute.get("/one-user/:id", async (req,res)=>{    
     try {
         const {id} = req.params;
-        const user = await userModel.findById(id);
+        const user = await userModel.findById(id).populate("tasks");
 
         if (!user){
             return res.status(400).json({msg: "Usuário não encontrado"});
@@ -56,6 +57,9 @@ userRoute.delete("/delete/:id", async (req,res)=>{
         if (!deletedUser){
             return res.status(400).json({msg: "Usuário não encontrado"});
         }
+
+        //DELETAR TODAS AS TAREFAS (TASKS) DO USUÁRIO - deleteMany
+        await taskModel.deleteMany({user: id}); //filtro
 
         return res.status(200).json(deletedUser);
     } catch (error) {

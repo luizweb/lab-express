@@ -30,7 +30,7 @@ const userSchema = new Schema({
         type: Boolean,
         default: true
     },
-    tasks: [{type: String}],
+    tasks: [{type: Schema.Types.ObjectId, ref:"Task"}],
     },
     {
         timestamps: true,
