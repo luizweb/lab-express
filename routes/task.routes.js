@@ -1,6 +1,6 @@
 import express from "express";
-import taskModel from "../model/task.model.js";
-import userModel from "../model/user.model.js";
+import taskModel from "../models/task.model.js";
+import userModel from "../models/user.model.js";
 
 const taskRoute = express.Router();
 
