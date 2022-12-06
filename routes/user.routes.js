@@ -1,4 +1,5 @@
-import express, { json } from "express";
+
+import express from "express";
 import taskModel from "../models/task.model.js";
 import userModel from "../models/user.model.js";
 
@@ -21,7 +22,7 @@ const userRoute = express.Router();
 
 // AUTENTICAÇÃO
 
-const saltRound = 10 // quantidade de caracteres da minha string 'salt'. 10 é o padrão.
+const saltRound = 10; // quantidade de caracteres da minha string 'salt'. 10 é o padrão.
 
 // ---- SIGN UP --------
 // criando um usuário no nosso banco de dados
