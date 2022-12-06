@@ -4,8 +4,11 @@ import * as dotenv from "dotenv";
 import connect from "./config/db.config.js";
 
 import userRoute from "./routes/user.routes.js"
-import processRoute from "./routes/process.routes.js";
+//import processRoute from "./routes/process.routes.js";
 import taskRoute from "./routes/task.routes.js";
+
+//https://expressjs.com/en/resources/middleware/cors.html
+import cors from 'cors';
 
 // dotenv
 dotenv.config();
@@ -13,6 +16,8 @@ dotenv.config();
 // express
 const app = express();
 app.use(express.json());
+
+app.use(cors());
 
 //conectando com o banco de dados
 connect();
@@ -27,7 +32,7 @@ app.get("/", (req,res)=>{
 
 // rotas únicas
 app.use("/user", userRoute);
-app.use("/process", processRoute);
+//app.use("/process", processRoute);
 app.use("/task", taskRoute);
 
 

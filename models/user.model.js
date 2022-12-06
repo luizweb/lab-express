@@ -9,11 +9,6 @@ const userSchema = new Schema({
         minLength: 2,
         maxLength: 20
     },
-    age: {
-        type: Number,
-        min: 18,
-        max: 100    
-    },
     email: {
         type: String,
         required: true,
@@ -21,16 +16,39 @@ const userSchema = new Schema({
         lowercase: true,
         match: /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/
     },
+    birth: {
+        type: Date
+    },
+    gender: {
+        type: String,
+        enum: ["masculino","feminino","não informado"]
+    },
     role: {
         type: String,
-        enum: ["professor","aluno","TA"],
-        default: "aluno"
+        enum: ["ADMIN","USER"],
+        default: "USER"
     },
+    address: {
+        type: String
+    },
+    city: {
+        type: String
+    },
+    state: {
+        type: String
+    },
+    image: {
+        type: String
+    },    
     active: {
         type: Boolean,
         default: true
     },
     tasks: [{type: Schema.Types.ObjectId, ref:"Task"}],
+    passwordHash: {
+        type: String, 
+        required: true
+    }
     },
     {
         timestamps: true,
